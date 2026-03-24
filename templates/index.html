@@ -37,25 +37,30 @@
 
 <body>
 
-    <h1>CFG to CNF & GNF Converter 🚀</h1>
+<h1>CFG to CNF & GNF Converter 🚀</h1>
 
-    <form method="POST">
+<form method="POST">
 
-        <textarea name="grammar" placeholder="Example:
+<textarea name="grammar" placeholder="Example:
 S -> AB | a
 A -> a
 B -> b"></textarea>
 
-        <br>
+<br>
 
-        <button type="submit">Convert</button>
+<button type="submit">Convert</button>
 
-    </form>
+</form>
 
-    {% if grammar %}
-        <h2>Your Input:</h2>
-        <pre>{{ grammar }}</pre>
-    {% endif %}
+{% if grammar %}
+    <h2>Your Input:</h2>
+    <pre>{{ grammar }}</pre>
+{% endif %}
+
+{% if parsed %}
+    <h2>Parsed Grammar:</h2>
+    <pre>{{ parsed }}</pre>
+{% endif %}
 
 </body>
 
