@@ -1,24 +1,62 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>CFG Converter</title>
+
+    <style>
+        body {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            font-family: Arial;
+        }
+
+        textarea {
+            width: 400px;
+            height: 150px;
+            margin-top: 20px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        pre {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+
 </head>
 
 <body>
 
-<h1>CFG to CNF & GNF Converter 🚀</h1>
+    <h1>CFG to CNF & GNF Converter 🚀</h1>
 
-<form method="POST">
-    <textarea name="grammar" rows="10" cols="50"
-    placeholder="Example:
+    <form method="POST">
+
+        <textarea name="grammar" placeholder="Example:
 S -> AB | a
 A -> a
 B -> b"></textarea>
 
-    <br><br>
+        <br>
 
-    <button type="submit">Convert</button>
-</form>
+        <button type="submit">Convert</button>
+
+    </form>
+
+    {% if grammar %}
+        <h2>Your Input:</h2>
+        <pre>{{ grammar }}</pre>
+    {% endif %}
 
 </body>
+
 </html>
