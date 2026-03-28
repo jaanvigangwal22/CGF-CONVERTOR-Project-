@@ -2,47 +2,152 @@
 <html>
 
 <head>
-    <title>CFG Visualizer</title>
+    <title>CFG Converter</title>
 
     <style>
         body {
-            background: #0f172a;
-            color: white;
-            font-family: Arial;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #fff6f8, #ffdce5, #ffeef3);
+            color: #3a2b30;
+        }
+
+        .header {
             text-align: center;
+            padding: 50px 10px 20px;
+        }
+
+        .header h1 {
+            font-size: 44px; /* 🔥 BIG TITLE */
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #9d4d5d; /* 🔥 DARK PINK */
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            font-size: 15px;
+            color: #7a5a63;
+        }
+
+        .accent {
+            color: #c44569; /* highlight words */
+            font-weight: 600;
+        }
+
+        .container {
+            width: 75%;
+            margin: auto;
         }
 
         textarea {
-            width: 60%;
-            height: 120px;
-            margin-top: 20px;
+            width: 100%;
+            height: 130px;
+            border-radius: 14px;
+            padding: 12px;
+            border: 1px solid #f1c6cf;
+            background: #fffafa;
+            font-size: 14px;
+            color: #3a2b30;
         }
 
         button {
-            padding: 10px 20px;
-            margin-top: 10px;
+            margin-top: 12px;
+            padding: 10px 28px;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(to right, #f4b6c2, #e89cab); /* darker pastel */
+            color: #3a2b30;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .box {
-            width: 60%;
-            margin: 20px auto;
-            padding: 15px;
-            background: #1e293b;
-            border-left: 5px solid #22c55e;
-            text-align: left;
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .flow {
+            margin-top: 35px;
+            padding-left: 25px;
+            border-left: 3px dashed #e8b7c2; /* darker pastel line */
+        }
+
+        .step {
+            position: relative;
+            background: #ffffff;
+            margin-bottom: 25px;
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            animation: fadeUp 0.5s ease;
+        }
+
+        .step::before {
+            content: "";
+            position: absolute;
+            left: -13px;
+            top: 25px;
+            width: 14px;
+            height: 14px;
+            background: #e89cab; /* darker dot */
+            border-radius: 50%;
+        }
+
+        .step h3 {
+            margin: 0;
+            font-size: 17px;
+            color: #9d4d5d;
+        }
+
+        .reason {
+            font-size: 13px;
+            margin-top: 6px;
+            color: #7a5a63;
         }
 
         pre {
-            background: black;
-            padding: 10px;
+            background: #fff3f6;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 12px;
+            font-size: 13px;
+            overflow-x: auto;
         }
+
+        .highlight {
+            border-left: 6px solid #c44569; /* 🔥 DARK highlight */
+            background: linear-gradient(to right, #ffe6eb, #ffd6df);
+            box-shadow: 0 6px 20px rgba(196, 69, 105, 0.2);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
     </style>
 
 </head>
 
 <body>
 
-<h1>CFG → CNF → GNF Converter</h1>
+<div class="header">
+    <h1>Grammar Transformation Visualizer</h1>
+    <div class="subtitle">
+        Conversion of CFG into 
+        <span class="accent">Chomsky Normal Form</span> and 
+        <span class="accent">Greibach Normal Form</span>
+    </div>
+</div>
+
+<div class="container">
 
 <form method="POST">
 <textarea name="grammar" placeholder="S -> AB
@@ -52,37 +157,75 @@ B -> b"></textarea>
 <button>Convert</button>
 </form>
 
+<div class="flow">
+
 {% if original %}
-<div class="box"><h3>Step 1: Original</h3><pre>{{ original }}</pre></div>
+<div class="step">
+<h3>Step 1: Original Grammar</h3>
+<div class="reason">Initial grammar provided.</div>
+<pre>{{ original }}</pre>
+</div>
 {% endif %}
 
 {% if epsilon %}
-<div class="box"><h3>Step 2: Epsilon Removed</h3><pre>{{ epsilon }}</pre></div>
+<div class="step">
+<h3>Step 2: Remove Epsilon</h3>
+<div class="reason">Removed empty productions.</div>
+<pre>{{ epsilon }}</pre>
+</div>
 {% endif %}
 
 {% if unit %}
-<div class="box"><h3>Step 3: Unit Removed</h3><pre>{{ unit }}</pre></div>
+<div class="step">
+<h3>Step 3: Remove Unit Productions</h3>
+<div class="reason">Replaced single-variable rules.</div>
+<pre>{{ unit }}</pre>
+</div>
 {% endif %}
 
 {% if useless %}
-<div class="box"><h3>Step 4: Useless Removed</h3><pre>{{ useless }}</pre></div>
+<div class="step">
+<h3>Step 4: Remove Useless Symbols</h3>
+<div class="reason">Removed non-generating symbols.</div>
+<pre>{{ useless }}</pre>
+</div>
 {% endif %}
 
 {% if cnf %}
-<div class="box"><h3>Step 5: CNF</h3><pre>{{ cnf }}</pre></div>
+<div class="step highlight">
+<h3>Step 5: CNF (Chomsky Normal Form)</h3>
+<div class="reason">Converted into CNF standard form.</div>
+<pre>{{ cnf }}</pre>
+</div>
 {% endif %}
 
 {% if gnf_step1 %}
-<div class="box"><h3>Step 6: GNF Step 1</h3><pre>{{ gnf_step1 }}</pre></div>
+<div class="step">
+<h3>Step 6: GNF Step 1</h3>
+<div class="reason">Transformation begins.</div>
+<pre>{{ gnf_step1 }}</pre>
+</div>
 {% endif %}
 
 {% if gnf_step2 %}
-<div class="box"><h3>Step 7: GNF Step 2</h3><pre>{{ gnf_step2 }}</pre></div>
+<div class="step">
+<h3>Step 7: GNF Step 2</h3>
+<div class="reason">Replacing leading variables.</div>
+<pre>{{ gnf_step2 }}</pre>
+</div>
 {% endif %}
 
 {% if gnf %}
-<div class="box"><h3>Final GNF</h3><pre>{{ gnf }}</pre></div>
+<div class="step highlight">
+<h3>Final Step: GNF (Greibach Normal Form)</h3>
+<div class="reason">All productions start with terminals.</div>
+<pre>{{ gnf }}</pre>
+</div>
 {% endif %}
+
+</div>
+
+</div>
 
 </body>
 </html>
