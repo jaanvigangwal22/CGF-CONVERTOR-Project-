@@ -21,7 +21,7 @@ def parse_grammar(grammar_text):
     return rules
 
 
-# ------------------ EPSILON REMOVAL ------------------
+# -------- EPSILON REMOVAL --------
 def remove_epsilon(rules):
 
     nullable = set()
@@ -53,17 +53,17 @@ def remove_epsilon(rules):
     return new_rules
 
 
-# ------------------ UNIT REMOVAL ------------------
+# -------- UNIT REMOVAL --------
 def remove_unit(rules):
 
     new_rules = {}
 
     for left in rules:
+
         new_prods = set()
 
         for prod in rules[left]:
 
-            # unit production like A -> B
             if len(prod) == 1 and prod.isupper():
                 new_prods.update(rules.get(prod, []))
             else:
@@ -74,12 +74,11 @@ def remove_unit(rules):
     return new_rules
 
 
-# ------------------ USELESS REMOVAL (basic) ------------------
+# -------- USELESS REMOVAL --------
 def remove_useless(rules):
 
     useful = set()
 
-    # find symbols producing terminals
     for left in rules:
         for prod in rules[left]:
             if prod.islower():
@@ -94,7 +93,7 @@ def remove_useless(rules):
     return new_rules
 
 
-# ------------------ FINAL CNF FORMAT (basic) ------------------
+# -------- CNF --------
 def to_cnf(rules):
 
     cnf_rules = {}
@@ -105,7 +104,6 @@ def to_cnf(rules):
 
         for prod in rules[left]:
 
-            # already valid CNF
             if len(prod) == 2 and prod.isupper():
                 new_prods.append(prod)
 
@@ -113,8 +111,60 @@ def to_cnf(rules):
                 new_prods.append(prod)
 
             else:
-                new_prods.append(prod)  # keep as is (basic)
+                new_prods.append(prod)
 
         cnf_rules[left] = new_prods
 
     return cnf_rules
+
+
+# -------- GNF STEP BY STEP --------
+def gnf_steps(rules):
+
+    # STEP 1: start from CNF
+    step1 = {}
+    for left in rules:
+        step1[left] = rules[left]
+
+
+    # STEP 2: replace first variable
+    step2 = {}
+
+    for left in step1:
+
+        new_prods = []
+
+        for prod in step1[left]:
+
+            if len(prod) > 0 and prod[0].islower():
+                new_prods.append(prod)
+
+            elif len(prod) > 0 and prod[0].isupper():
+
+                first = prod[0]
+                rest = prod[1:]
+
+                for rep in step1.get(first, []):
+                    new_prods.append(rep + rest)
+
+            else:
+                new_prods.append(prod)
+
+        step2[left] = new_prods
+
+
+    # STEP 3: final GNF (only terminal start)
+    final_gnf = {}
+
+    for left in step2:
+
+        new_prods = []
+
+        for prod in step2[left]:
+
+            if len(prod) > 0 and prod[0].islower():
+                new_prods.append(prod)
+
+        final_gnf[left] = new_prods
+
+    return step1, step2, final_gnf

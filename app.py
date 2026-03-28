@@ -4,7 +4,8 @@ from parser import (
     remove_epsilon,
     remove_unit,
     remove_useless,
-    to_cnf
+    to_cnf,
+    gnf_steps
 )
 
 app = Flask(__name__)
@@ -19,7 +20,12 @@ def home():
     no_useless = {}
     cnf = {}
 
+    gnf_step1 = {}
+    gnf_step2 = {}
+    gnf = {}
+
     if request.method == "POST":
+
         grammar = request.form["grammar"]
 
         parsed = parse_grammar(grammar)
@@ -28,6 +34,9 @@ def home():
         no_useless = remove_useless(no_unit)
         cnf = to_cnf(no_useless)
 
+        # GNF steps
+        gnf_step1, gnf_step2, gnf = gnf_steps(cnf)
+
     return render_template(
         "index.html",
         grammar=grammar,
@@ -35,7 +44,10 @@ def home():
         no_epsilon=no_epsilon,
         no_unit=no_unit,
         no_useless=no_useless,
-        cnf=cnf
+        cnf=cnf,
+        gnf_step1=gnf_step1,
+        gnf_step2=gnf_step2,
+        gnf=gnf
     )
 
 if __name__ == "__main__":
