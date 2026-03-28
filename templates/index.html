@@ -37,13 +37,13 @@
 
 <body>
 
-<h1>CFG to CNF & GNF Converter 🚀</h1>
+<h1>CFG to CNF Converter 🚀</h1>
 
 <form method="POST">
 
 <textarea name="grammar" placeholder="Example:
-S -> AB | a
-A -> a
+S -> AB
+A -> e
 B -> b"></textarea>
 
 <br>
@@ -52,14 +52,14 @@ B -> b"></textarea>
 
 </form>
 
-{% if grammar %}
-    <h2>Your Input:</h2>
-    <pre>{{ grammar }}</pre>
+{% if parsed %}
+    <h2>Original Grammar:</h2>
+    <pre>{{ parsed }}</pre>
 {% endif %}
 
-{% if parsed %}
-    <h2>Parsed Grammar:</h2>
-    <pre>{{ parsed }}</pre>
+{% if no_epsilon %}
+    <h2>After e (epsilon) Removal:</h2>
+    <pre>{{ no_epsilon }}</pre>
 {% endif %}
 
 </body>
