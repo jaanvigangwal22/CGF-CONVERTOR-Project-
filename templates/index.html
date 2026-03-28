@@ -2,32 +2,39 @@
 <html>
 
 <head>
-    <title>CFG Converter</title>
+    <title>CFG Visualizer</title>
 
     <style>
         body {
             background: #0f172a;
             color: white;
-            text-align: center;
             font-family: Arial;
+            text-align: center;
         }
 
         textarea {
-            width: 400px;
-            height: 150px;
-        }
-
-        pre {
-            background: #1e293b;
-            padding: 10px;
-            border-radius: 10px;
-            width: 400px;
-            margin: 10px auto;
+            width: 60%;
+            height: 120px;
+            margin-top: 20px;
         }
 
         button {
-            margin-top: 10px;
             padding: 10px 20px;
+            margin-top: 10px;
+        }
+
+        .box {
+            width: 60%;
+            margin: 20px auto;
+            padding: 15px;
+            background: #1e293b;
+            border-left: 5px solid #22c55e;
+            text-align: left;
+        }
+
+        pre {
+            background: black;
+            padding: 10px;
         }
     </style>
 
@@ -35,57 +42,47 @@
 
 <body>
 
-<h1>CFG → CNF → GNF Converter 🚀</h1>
+<h1>CFG → CNF → GNF Converter</h1>
 
 <form method="POST">
-<textarea name="grammar" placeholder="Example:
-S -> AB
+<textarea name="grammar" placeholder="S -> AB
 A -> e
 B -> b"></textarea>
 <br>
-<button type="submit">Convert</button>
+<button>Convert</button>
 </form>
 
-{% if parsed %}
-<h3>Original Grammar</h3>
-<pre>{{ parsed }}</pre>
+{% if original %}
+<div class="box"><h3>Step 1: Original</h3><pre>{{ original }}</pre></div>
 {% endif %}
 
-{% if no_epsilon %}
-<h3>After Epsilon Removal</h3>
-<pre>{{ no_epsilon }}</pre>
+{% if epsilon %}
+<div class="box"><h3>Step 2: Epsilon Removed</h3><pre>{{ epsilon }}</pre></div>
 {% endif %}
 
-{% if no_unit %}
-<h3>After Unit Removal</h3>
-<pre>{{ no_unit }}</pre>
+{% if unit %}
+<div class="box"><h3>Step 3: Unit Removed</h3><pre>{{ unit }}</pre></div>
 {% endif %}
 
-{% if no_useless %}
-<h3>After Useless Removal</h3>
-<pre>{{ no_useless }}</pre>
+{% if useless %}
+<div class="box"><h3>Step 4: Useless Removed</h3><pre>{{ useless }}</pre></div>
 {% endif %}
 
 {% if cnf %}
-<h3>CNF Form</h3>
-<pre>{{ cnf }}</pre>
+<div class="box"><h3>Step 5: CNF</h3><pre>{{ cnf }}</pre></div>
 {% endif %}
 
 {% if gnf_step1 %}
-<h3>GNF Step 1 (Start from CNF)</h3>
-<pre>{{ gnf_step1 }}</pre>
+<div class="box"><h3>Step 6: GNF Step 1</h3><pre>{{ gnf_step1 }}</pre></div>
 {% endif %}
 
 {% if gnf_step2 %}
-<h3>GNF Step 2 (Replace Variables)</h3>
-<pre>{{ gnf_step2 }}</pre>
+<div class="box"><h3>Step 7: GNF Step 2</h3><pre>{{ gnf_step2 }}</pre></div>
 {% endif %}
 
 {% if gnf %}
-<h2>Final GNF</h2>
-<pre>{{ gnf }}</pre>
+<div class="box"><h3>Final GNF</h3><pre>{{ gnf }}</pre></div>
 {% endif %}
 
 </body>
-
 </html>

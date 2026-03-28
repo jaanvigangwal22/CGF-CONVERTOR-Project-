@@ -118,16 +118,11 @@ def to_cnf(rules):
     return cnf_rules
 
 
-# -------- GNF STEP BY STEP --------
+# -------- GNF STEP --------
 def gnf_steps(rules):
 
-    # STEP 1: start from CNF
-    step1 = {}
-    for left in rules:
-        step1[left] = rules[left]
+    step1 = rules.copy()
 
-
-    # STEP 2: replace first variable
     step2 = {}
 
     for left in step1:
@@ -152,8 +147,6 @@ def gnf_steps(rules):
 
         step2[left] = new_prods
 
-
-    # STEP 3: final GNF (only terminal start)
     final_gnf = {}
 
     for left in step2:
@@ -168,3 +161,15 @@ def gnf_steps(rules):
         final_gnf[left] = new_prods
 
     return step1, step2, final_gnf
+
+
+# -------- FORMAT OUTPUT --------
+def format_grammar(rules):
+
+    result = ""
+
+    for left in rules:
+        right = " | ".join(rules[left])
+        result += f"{left} -> {right}\n"
+
+    return result
