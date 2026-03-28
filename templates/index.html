@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>CFG Converter</title>
+    <title>CFG to CNF Converter</title>
 
     <style>
         body {
@@ -15,21 +15,19 @@
         textarea {
             width: 400px;
             height: 150px;
-            margin-top: 20px;
         }
 
         button {
-            margin-top: 20px;
             padding: 10px 20px;
-            cursor: pointer;
+            margin-top: 10px;
         }
 
         pre {
             background: #1e293b;
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
-            display: inline-block;
-            margin-top: 20px;
+            margin: 10px auto;
+            width: 400px;
         }
     </style>
 
@@ -37,29 +35,40 @@
 
 <body>
 
-<h1>CFG to CNF Converter 🚀</h1>
+<h1>CFG → CNF Converter 🚀</h1>
 
 <form method="POST">
-
 <textarea name="grammar" placeholder="Example:
 S -> AB
 A -> e
 B -> b"></textarea>
-
 <br>
-
 <button type="submit">Convert</button>
-
 </form>
 
 {% if parsed %}
-    <h2>Original Grammar:</h2>
-    <pre>{{ parsed }}</pre>
+<h3>Original:</h3>
+<pre>{{ parsed }}</pre>
 {% endif %}
 
 {% if no_epsilon %}
-    <h2>After e (epsilon) Removal:</h2>
-    <pre>{{ no_epsilon }}</pre>
+<h3>After Epsilon Removal:</h3>
+<pre>{{ no_epsilon }}</pre>
+{% endif %}
+
+{% if no_unit %}
+<h3>After Unit Removal:</h3>
+<pre>{{ no_unit }}</pre>
+{% endif %}
+
+{% if no_useless %}
+<h3>After Useless Removal:</h3>
+<pre>{{ no_useless }}</pre>
+{% endif %}
+
+{% if cnf %}
+<h2>Final CNF:</h2>
+<pre>{{ cnf }}</pre>
 {% endif %}
 
 </body>
